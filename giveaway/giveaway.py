@@ -98,7 +98,7 @@ class GiveawayPlugin(commands.Cog):
                     if str(giveaway["message"]) not in self.active_giveaways:
                         break
 
-                    if r.emoji == "🎉":
+                    if r.emoji == "<a:nitrofast:671921542711607322>":
                         reactions = r
                         reacted_users = await reactions.users().flatten()
                         if len(reacted_users) <= 1:
@@ -140,8 +140,7 @@ class GiveawayPlugin(commands.Cog):
                         )
                         await message.edit(embed=embed)
                         await channel.send(
-                            f"🎉 Congratulations {winners_text}, you have won **{giveaway['item']}**!"
-                        )
+                            f"**Congratulations** __{winners_text}__, you won **{giveaway['item']}**!")
                         try:
                             self.active_giveaways.pop(str(giveaway["message"]))
                             await self._update_db()
@@ -159,7 +158,7 @@ class GiveawayPlugin(commands.Cog):
 
                 embed = message.embeds[0]
                 embed.description = (
-                    f"React with 🎉 to enter the giveaway!\n\n"
+                    f"React with <a:nitrofast:671921542711607322> to enter the giveaway!\n\n"
                     f"Time Remaining: **{time_remaining}**"
                 )
                 await message.edit(embed=embed)
@@ -201,16 +200,16 @@ class GiveawayPlugin(commands.Cog):
         def cancel_check(msg: discord.Message):
             return msg.content == "cancel" or msg.content == f"{ctx.prefix}cancel"
 
-        embed = discord.Embed(colour=0x00FF00)
+        embed = discord.Embed(colour=0x00aeff)
 
-        await ctx.send(embed=self.generate_embed("What is the giveaway item?"))
+        await ctx.send(embed=self.generate_embed("**Neon Rewards | Club**: What item are you going to give away?"))
         giveaway_item = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_item) is True:
             await ctx.send("Cancelled.")
             return
         embed.title = giveaway_item.content
         await ctx.send(
-            embed=self.generate_embed("How many winners are to be selected?")
+            embed=self.generate_embed("**Neon Rewards | Club**: How many winners should be selected?")
         )
         giveaway_winners = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_winners) is True:
@@ -227,13 +226,13 @@ class GiveawayPlugin(commands.Cog):
 
         if giveaway_winners <= 0:
             await ctx.send(
-                "Giveaway can only be held with 1 or more winners. Cancelling command."
+                "**Neon Rewards | Club**: Giveaway needs to have at least 1 winner. Canceling commands."
             )
             return
 
         await ctx.send(
             embed=self.generate_embed(
-                "How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
+                "**Neon Rewards | Club**: How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
                 "2m -> 2 minutes\n2 months -> 2 months"
                 "\ntomorrow / in 10 minutes / 2h 10minutes work too\n"
             )
@@ -251,7 +250,7 @@ class GiveawayPlugin(commands.Cog):
             )
             if resp.status == 400:
                 await ctx.send(
-                    "I was not able to parse the time properly, please try again."
+                    "**Neon Rewards | Club**: I was not able to parse the time properly, please try again."
                 )
                 continue
             elif resp.status == 500:
@@ -267,7 +266,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         embed.description = (
-            f"React with 🎉 to enter the giveaway!\n\n"
+            f"React with <a:nitrofast:671921542711607322> to enter the giveaway!\n\n"
             f"Time Remaining: **{datetime.fromtimestamp(giveaway_time).strftime('%d %H:%M:%S')}**"
         )
         embed.set_footer(
@@ -275,7 +274,7 @@ class GiveawayPlugin(commands.Cog):
         )
         embed.timestamp = datetime.fromtimestamp(giveaway_time)
         msg: discord.Message = await channel.send(embed=embed)
-        await msg.add_reaction("🎉")
+        await msg.add_reaction("<a:nitrofast:671921542711607322>")
         giveaway_obj = {
             "item": giveaway_item.content,
             "winners": giveaway_winners,
@@ -301,7 +300,7 @@ class GiveawayPlugin(commands.Cog):
 
         # Don't roll if giveaway is active
         if _id in self.active_giveaways:
-            await ctx.send("Sorry, but you can't reroll an active giveaway.")
+            await ctx.send("**Neon Rewards | Club**: This giveaway hasn't ended yet! **Time Remaining**: {time_remaining}")
             return
 
         async def get_random_user(users, _guild, _winners):
@@ -317,15 +316,15 @@ class GiveawayPlugin(commands.Cog):
         try:
             message = await ctx.channel.fetch_message(int(_id))
         except discord.Forbidden:
-            await ctx.send("No permission to read the history.")
+            await ctx.send("**Neon Rewards | Club**: I don't have permission to read the message history of that channel!")
             return
         except discord.NotFound:
-            await ctx.send("Message not found.")
+            await ctx.send("**Neon Rewards | Club**: I wasn't able to find the message!")
             return
 
         if not message.embeds or message.embeds[0] is None:
             await ctx.send(
-                "The given message doesn't have an embed, so it isn't related to a giveaway."
+                "**Neon Rewards | Club**: The given message doesn't have an embed, so it isn't related to a giveaway."
             )
             return
 
@@ -339,7 +338,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         for r in message.reactions:
-            if r.emoji == "🎉":
+            if r.emoji == "<a:nitrofast:671921542711607322>":
                 reactions = r
                 reacted_users = await reactions.users().flatten()
                 if len(reacted_users) <= 1:
@@ -374,7 +373,7 @@ class GiveawayPlugin(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 await ctx.channel.send(
-                    f"🎉 Congratulations {winners_text}, you have won **{embed.title}**!"
+                    f"**Congratulations** __{winners_text}__, you won **{embed.title}**!"
                 )
                 del winners_text, winners, winners_count, reacted_users, embed
                 break
@@ -390,7 +389,7 @@ class GiveawayPlugin(commands.Cog):
         """
 
         if _id not in self.active_giveaways:
-            await ctx.send("Couldn't find an active giveaway with that ID!")
+            await ctx.send("**Neon Rewards | Club**: Couldn't find an active giveaway with that ID!")
             return
 
         giveaway = self.active_giveaways[_id]
@@ -398,20 +397,20 @@ class GiveawayPlugin(commands.Cog):
         try:
             message = await channel.fetch_message(int(_id))
         except discord.Forbidden:
-            await ctx.send("No permission to read the history.")
+            await ctx.send("**Neon Rewards | Club**: I don't have permission to read the message history of that channel!")
             return
         except discord.NotFound:
-            await ctx.send("Message not found.")
+            await ctx.send("**Neon Rewards | Club**: I wasn't able to find the message!")
             return
 
         if not message.embeds or message.embeds[0] is None:
             await ctx.send(
-                "The given message doesn't have an embed, so it isn't related to a giveaway."
+                "**Neon Rewards | Club**: The given message doesn't have an embed, so it isn't related to a giveaway."
             )
             return
 
         embed = message.embeds[0]
-        embed.description = "The giveaway has been cancelled."
+        embed.description = "**Neon Rewards | Club**: The giveaway has been cancelled!"
         await message.edit(embed=embed)
         self.active_giveaways.pop(_id)
         await self._update_db()
