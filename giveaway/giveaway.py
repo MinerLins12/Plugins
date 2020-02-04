@@ -98,7 +98,7 @@ class GiveawayPlugin(commands.Cog):
                     if str(giveaway["message"]) not in self.active_giveaways:
                         break
 
-                    if r.emoji == "<a:nitrofast:671921542711607322>":
+                    if r.emoji == "🎉":
                         reactions = r
                         reacted_users = await reactions.users().flatten()
                         if len(reacted_users) <= 1:
@@ -140,7 +140,7 @@ class GiveawayPlugin(commands.Cog):
                         )
                         await message.edit(embed=embed)
                         await channel.send(
-                            f"<a:nitrofast:671921542711607322> Congratulations {winners_text}, you have won **{giveaway['item']}**!"
+                            f"🎉 Congratulations {winners_text}, you have won **{giveaway['item']}**!"
                         )
                         try:
                             self.active_giveaways.pop(str(giveaway["message"]))
@@ -159,7 +159,7 @@ class GiveawayPlugin(commands.Cog):
 
                 embed = message.embeds[0]
                 embed.description = (
-                    f"React with <a:nitrofast:671921542711607322> to enter the giveaway!\n\n"
+                    f"React with 🎉 to enter the giveaway!\n\n"
                     f"Time Remaining: **{time_remaining}**"
                 )
                 await message.edit(embed=embed)
@@ -267,7 +267,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         embed.description = (
-            f"React with <a:nitrofast:671921542711607322> to enter the giveaway!\n\n"
+            f"React with 🎉 to enter the giveaway!\n\n"
             f"Time Remaining: **{datetime.fromtimestamp(giveaway_time).strftime('%d %H:%M:%S')}**"
         )
         embed.set_footer(
@@ -275,7 +275,7 @@ class GiveawayPlugin(commands.Cog):
         )
         embed.timestamp = datetime.fromtimestamp(giveaway_time)
         msg: discord.Message = await channel.send(embed=embed)
-        await msg.add_reaction("<a:nitrofast:671921542711607322>")
+        await msg.add_reaction("🎉")
         giveaway_obj = {
             "item": giveaway_item.content,
             "winners": giveaway_winners,
@@ -338,7 +338,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         for r in message.reactions:
-            if r.emoji == "<a:nitrofast:671921542711607322>":
+            if r.emoji == "🎉":
                 reactions = r
                 reacted_users = await reactions.users().flatten()
                 if len(reacted_users) <= 1:
@@ -373,7 +373,7 @@ class GiveawayPlugin(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 await ctx.channel.send(
-                    f"<a:nitrofast:671921542711607322> Congratulations {winners_text}, you have won **{embed.title}**!"
+                    f"🎉 Congratulations {winners_text}, you have won **{embed.title}**!"
                 )
                 del winners_text, winners, winners_count, reacted_users, embed
                 break
