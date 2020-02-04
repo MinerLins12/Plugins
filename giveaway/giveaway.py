@@ -300,7 +300,7 @@ class GiveawayPlugin(commands.Cog):
 
         # Don't roll if giveaway is active
         if _id in self.active_giveaways:
-            await ctx.send("**Neon Rewards | Club**: This giveaway hasn't ended yet! **Time Remaining**: {time_remaining}")
+            await ctx.send("**Neon Rewards | Club**: This giveaway hasn't ended yet!")
             return
 
         async def get_random_user(users, _guild, _winners):
@@ -373,7 +373,7 @@ class GiveawayPlugin(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 await ctx.channel.send(
-                    f"**Congratulations** __{winners_text}__, you won **{embed.title}**!"
+                    f"Congratulations {winners_text}, you have won **{embed.title}**!"
                 )
                 del winners_text, winners, winners_count, reacted_users, embed
                 break
