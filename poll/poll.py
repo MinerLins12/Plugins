@@ -55,7 +55,7 @@ class Polls(commands.Cog):
         for i in range(20):
             messages.append(
                 await ctx.send(
-                    f"Say a Poll option or {ctx.prefix}done to publish the Poll."
+                    f"Say a Poll option or {ctx.prefix}done to stop."
                 )
             )
 
