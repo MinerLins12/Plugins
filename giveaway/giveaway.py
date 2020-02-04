@@ -140,7 +140,8 @@ class GiveawayPlugin(commands.Cog):
                         )
                         await message.edit(embed=embed)
                         await channel.send(
-                            f"**Congratulations** __{winners_text}__, you won **{giveaway['item']}**!")
+                            f"<a:nitrofast:671921542711607322> Congratulations {winners_text}, you have won **{giveaway['item']}**!"
+                        )
                         try:
                             self.active_giveaways.pop(str(giveaway["message"]))
                             await self._update_db()
@@ -202,14 +203,14 @@ class GiveawayPlugin(commands.Cog):
 
         embed = discord.Embed(colour=0x00aeff)
 
-        await ctx.send(embed=self.generate_embed("**Neon Rewards | Club**: What item are you going to give away?"))
+        await ctx.send(embed=self.generate_embed("What is the giveaway item?"))
         giveaway_item = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_item) is True:
             await ctx.send("Cancelled.")
             return
         embed.title = giveaway_item.content
         await ctx.send(
-            embed=self.generate_embed("**Neon Rewards | Club**: How many winners should be selected?")
+            embed=self.generate_embed("How many winners are to be selected?")
         )
         giveaway_winners = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_winners) is True:
@@ -226,13 +227,13 @@ class GiveawayPlugin(commands.Cog):
 
         if giveaway_winners <= 0:
             await ctx.send(
-                "**Neon Rewards | Club**: Giveaway needs to have at least 1 winner. Canceling commands."
+                "Giveaway can only be held with 1 or more winners. Cancelling command."
             )
             return
 
         await ctx.send(
             embed=self.generate_embed(
-                "**Neon Rewards | Club**: How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
+                "How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
                 "2m -> 2 minutes\n2 months -> 2 months"
                 "\ntomorrow / in 10 minutes / 2h 10minutes work too\n"
             )
@@ -250,7 +251,7 @@ class GiveawayPlugin(commands.Cog):
             )
             if resp.status == 400:
                 await ctx.send(
-                    "**Neon Rewards | Club**: I was not able to parse the time properly, please try again."
+                    "I was not able to parse the time properly, please try again."
                 )
                 continue
             elif resp.status == 500:
@@ -270,7 +271,7 @@ class GiveawayPlugin(commands.Cog):
             f"Time Remaining: **{datetime.fromtimestamp(giveaway_time).strftime('%d %H:%M:%S')}**"
         )
         embed.set_footer(
-            text=f"{giveaway_winners} {'winners' if giveaway_winners > 1 else 'winner'} | Ending"
+            text=f"{giveaway_winners} {'winners' if giveaway_winners > 1 else 'winner'} | Ends at"
         )
         embed.timestamp = datetime.fromtimestamp(giveaway_time)
         msg: discord.Message = await channel.send(embed=embed)
@@ -293,14 +294,13 @@ class GiveawayPlugin(commands.Cog):
     async def reroll(self, ctx: commands.Context, _id: str, winners_count: int):
         """
         Reroll the giveaway
-
         **Usage:**
         {prefix}giveaway reroll <message_id> <winners_count>
         """
 
         # Don't roll if giveaway is active
         if _id in self.active_giveaways:
-            await ctx.send("**Neon Rewards | Club**: This giveaway hasn't ended yet!")
+            await ctx.send("Sorry, but you can't reroll an active giveaway.")
             return
 
         async def get_random_user(users, _guild, _winners):
@@ -316,15 +316,15 @@ class GiveawayPlugin(commands.Cog):
         try:
             message = await ctx.channel.fetch_message(int(_id))
         except discord.Forbidden:
-            await ctx.send("**Neon Rewards | Club**: I don't have permission to read the message history of that channel!")
+            await ctx.send("No permission to read the history.")
             return
         except discord.NotFound:
-            await ctx.send("**Neon Rewards | Club**: I wasn't able to find the message!")
+            await ctx.send("Message not found.")
             return
 
         if not message.embeds or message.embeds[0] is None:
             await ctx.send(
-                "**Neon Rewards | Club**: The given message doesn't have an embed, so it isn't related to a giveaway."
+                "The given message doesn't have an embed, so it isn't related to a giveaway."
             )
             return
 
@@ -373,7 +373,7 @@ class GiveawayPlugin(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 await ctx.channel.send(
-                    f"Congratulations {winners_text}, you have won **{embed.title}**!"
+                    f"<a:nitrofast:671921542711607322> Congratulations {winners_text}, you have won **{embed.title}**!"
                 )
                 del winners_text, winners, winners_count, reacted_users, embed
                 break
@@ -383,13 +383,12 @@ class GiveawayPlugin(commands.Cog):
     async def cancel(self, ctx: commands.Context, _id: str):
         """
         Stop an active giveaway
-
         **Usage:**
         {prefix}giveaway stop <message_id>
         """
 
         if _id not in self.active_giveaways:
-            await ctx.send("**Neon Rewards | Club**: Couldn't find an active giveaway with that ID!")
+            await ctx.send("Couldn't find an active giveaway with that ID!")
             return
 
         giveaway = self.active_giveaways[_id]
@@ -397,20 +396,20 @@ class GiveawayPlugin(commands.Cog):
         try:
             message = await channel.fetch_message(int(_id))
         except discord.Forbidden:
-            await ctx.send("**Neon Rewards | Club**: I don't have permission to read the message history of that channel!")
+            await ctx.send("No permission to read the history.")
             return
         except discord.NotFound:
-            await ctx.send("**Neon Rewards | Club**: I wasn't able to find the message!")
+            await ctx.send("Message not found.")
             return
 
         if not message.embeds or message.embeds[0] is None:
             await ctx.send(
-                "**Neon Rewards | Club**: The given message doesn't have an embed, so it isn't related to a giveaway."
+                "The given message doesn't have an embed, so it isn't related to a giveaway."
             )
             return
 
         embed = message.embeds[0]
-        embed.description = "**Neon Rewards | Club**: The giveaway has been cancelled!"
+        embed.description = "The giveaway has been cancelled."
         await message.edit(embed=embed)
         self.active_giveaways.pop(_id)
         await self._update_db()
