@@ -101,11 +101,11 @@ class Polls(commands.Cog):
         """
 
         if len(questions_and_choices) == 0:
-            return await ctx.send("You need to specify a question.")
+            return await ctx.send("You need to specify a question!")
         elif len(questions_and_choices) == 2:
-            return await ctx.send("You need at least 2 choices.")
+            return await ctx.send("You need at least 2 choices!")
         elif len(questions_and_choices) > 21:
-            return await ctx.send("You can only have up to 20 choices.")
+            return await ctx.send("You can only have up to 20 choices!")
 
         perms = ctx.channel.permissions_for(ctx.me)
         if not perms.add_reactions:
