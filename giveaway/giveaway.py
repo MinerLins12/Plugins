@@ -270,7 +270,7 @@ class GiveawayPlugin(commands.Cog):
             f"Time Remaining: **{datetime.fromtimestamp(giveaway_time).strftime('%d %H:%M:%S')}**"
         )
         embed.set_footer(
-            text=f"{giveaway_winners} {'winners' if giveaway_winners > 1 else 'winner'} | Ends at"
+            text=f"{giveaway_winners} {'winners' if giveaway_winners > 1 else 'winner'} | Ending"
         )
         embed.timestamp = datetime.fromtimestamp(giveaway_time)
         msg: discord.Message = await channel.send(embed=embed)
