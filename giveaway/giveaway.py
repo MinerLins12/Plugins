@@ -98,7 +98,7 @@ class GiveawayPlugin(commands.Cog):
                     if str(giveaway["message"]) not in self.active_giveaways:
                         break
 
-                    if r.emoji == "<a:party:674425029014061056>":
+                    if r.custom_emoji == "<a:party:674425029014061056>":
                         reactions = r
                         reacted_users = await reactions.users().flatten()
                         if len(reacted_users) <= 1:
@@ -338,7 +338,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         for r in message.reactions:
-            if r.emoji == "<a:party:674425029014061056>":
+            if r.custom_emoji == "<a:party:674425029014061056>":
                 reactions = r
                 reacted_users = await reactions.users().flatten()
                 if len(reacted_users) <= 1:
