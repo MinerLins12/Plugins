@@ -159,7 +159,7 @@ class GiveawayPlugin(commands.Cog):
 
                 embed = message.embeds[0]
                 embed.description = (
-                    f"React with 🎉 to enter the giveaway!\n\n"
+                    f"**Neon Rewards | Club**: React to this message to enter the giveaway!\n\n"
                     f"Time Remaining: **{time_remaining}**"
                 )
                 await message.edit(embed=embed)
@@ -203,14 +203,14 @@ class GiveawayPlugin(commands.Cog):
 
         embed = discord.Embed(colour=0x00FF00)
 
-        await ctx.send(embed=self.generate_embed("What is the giveaway item?"))
+        await ctx.send(embed=self.generate_embed("**Neon Rewards | Club**: What is the giveaway item?"))
         giveaway_item = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_item) is True:
             await ctx.send("Cancelled.")
             return
         embed.title = giveaway_item.content
         await ctx.send(
-            embed=self.generate_embed("How many winners are to be selected?")
+            embed=self.generate_embed("**Neon Rewards | Club**: How many winners should there be?")
         )
         giveaway_winners = await self.bot.wait_for("message", check=check)
         if cancel_check(giveaway_winners) is True:
@@ -227,13 +227,13 @@ class GiveawayPlugin(commands.Cog):
 
         if giveaway_winners <= 0:
             await ctx.send(
-                "Giveaway can only be held with 1 or more winners. Cancelling command."
+                "**Neon Rewards | Club**: Giveaway can only be held with 1 or more winners. Cancelling command."
             )
             return
 
         await ctx.send(
             embed=self.generate_embed(
-                "How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
+                "**Neon Rewards | Club**: How long will the giveaway last?\n\n2d / 2days / 2day -> 2 days\n"
                 "2m -> 2 minutes\n2 months -> 2 months"
                 "\ntomorrow / in 10 minutes / 2h 10minutes work too\n"
             )
@@ -243,7 +243,7 @@ class GiveawayPlugin(commands.Cog):
             giveaway_time = await self.bot.wait_for("message", check=check)
             if cancel_check(giveaway_time) is True:
                 time_cancel = True
-                await ctx.send("Cancelled.")
+                await ctx.send("**Neon Rewards | Club**: Cancelled.")
                 break
             resp = await self.bot.session.get(
                 "https://dateparser.piyush.codes",
@@ -251,7 +251,7 @@ class GiveawayPlugin(commands.Cog):
             )
             if resp.status == 400:
                 await ctx.send(
-                    "I was not able to parse the time properly, please try again."
+                    "**Neon Rewards | Club**: I was not able to parse the time properly, please try again."
                 )
                 continue
             elif resp.status == 500:
