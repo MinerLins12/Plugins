@@ -98,7 +98,7 @@ class GiveawayPlugin(commands.Cog):
                     if str(giveaway["message"]) not in self.active_giveaways:
                         break
 
-                    if r.custom_emoji == "<a:party:674425029014061056>":
+                    if r.emoji == "🎉":
                         reactions = r
                         reacted_users = await reactions.users().flatten()
                         if len(reacted_users) <= 1:
@@ -140,7 +140,7 @@ class GiveawayPlugin(commands.Cog):
                         )
                         await message.edit(embed=embed)
                         await channel.send(
-                            f"<a:party:674425029014061056> Congratulations {winners_text}, you have won **{giveaway['item']}**!"
+                            f"🎉 Congratulations {winners_text}, you have won **{giveaway['item']}**!"
                         )
                         try:
                             self.active_giveaways.pop(str(giveaway["message"]))
@@ -159,7 +159,7 @@ class GiveawayPlugin(commands.Cog):
 
                 embed = message.embeds[0]
                 embed.description = (
-                    f"React with <a:party:674425029014061056> to enter the giveaway!\n\n"
+                    f"React with 🎉 to enter the giveaway!\n\n"
                     f"Time Remaining: **{time_remaining}**"
                 )
                 await message.edit(embed=embed)
@@ -201,7 +201,7 @@ class GiveawayPlugin(commands.Cog):
         def cancel_check(msg: discord.Message):
             return msg.content == "cancel" or msg.content == f"{ctx.prefix}cancel"
 
-        embed = discord.Embed(colour=0x00aeff)
+        embed = discord.Embed(colour=0x00FF00)
 
         await ctx.send(embed=self.generate_embed("What is the giveaway item?"))
         giveaway_item = await self.bot.wait_for("message", check=check)
@@ -267,7 +267,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         embed.description = (
-            f"React with <a:party:674425029014061056> to enter the giveaway!\n\n"
+            f"React with 🎉 to enter the giveaway!\n\n"
             f"Time Remaining: **{datetime.fromtimestamp(giveaway_time).strftime('%d %H:%M:%S')}**"
         )
         embed.set_footer(
@@ -275,7 +275,7 @@ class GiveawayPlugin(commands.Cog):
         )
         embed.timestamp = datetime.fromtimestamp(giveaway_time)
         msg: discord.Message = await channel.send(embed=embed)
-        await msg.add_reaction("<a:party:674425029014061056>")
+        await msg.add_reaction("🎉")
         giveaway_obj = {
             "item": giveaway_item.content,
             "winners": giveaway_winners,
@@ -294,6 +294,7 @@ class GiveawayPlugin(commands.Cog):
     async def reroll(self, ctx: commands.Context, _id: str, winners_count: int):
         """
         Reroll the giveaway
+
         **Usage:**
         {prefix}giveaway reroll <message_id> <winners_count>
         """
@@ -338,7 +339,7 @@ class GiveawayPlugin(commands.Cog):
             return
 
         for r in message.reactions:
-            if r.custom_emoji == "<a:party:674425029014061056>":
+            if r.emoji == "🎉":
                 reactions = r
                 reacted_users = await reactions.users().flatten()
                 if len(reacted_users) <= 1:
@@ -373,7 +374,7 @@ class GiveawayPlugin(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 await ctx.channel.send(
-                    f"<a:party:674425029014061056> Congratulations {winners_text}, you have won **{embed.title}**!"
+                    f"🎉 Congratulations {winners_text}, you have won **{embed.title}**!"
                 )
                 del winners_text, winners, winners_count, reacted_users, embed
                 break
@@ -383,6 +384,7 @@ class GiveawayPlugin(commands.Cog):
     async def cancel(self, ctx: commands.Context, _id: str):
         """
         Stop an active giveaway
+
         **Usage:**
         {prefix}giveaway stop <message_id>
         """
